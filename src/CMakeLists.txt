@@ -5,26 +5,6 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-APPLY_COMMON_POLICIES()
-
-include(MacroDPlugins)
-
-include_directories($<TARGET_PROPERTY:Qt${QT_VERSION_MAJOR}::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt${QT_VERSION_MAJOR}::Core,INTERFACE_INCLUDE_DIRECTORIES>
-
-                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
-)
-
-if(ENABLE_QWEBENGINE)
-    include_directories($<TARGET_PROPERTY:Qt${QT_VERSION_MAJOR}::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
-else()
-    include_directories($<TARGET_PROPERTY:Qt${QT_VERSION_MAJOR}::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
-
-# --------------------------------------------------------------------------------
-
 set(libvkontakte_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/vkontakte_vkapi.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/backend/vkontakte_getapplicationpermissionsjob.cpp
@@ -84,7 +64,24 @@ set(vkontakteplugin_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/vkwindow.cpp
 )
 
-DIGIKAM_ADD_GENERIC_PLUGIN(NAME    VKontakte
-                           SOURCES ${vkontakteplugin_SRCS}
-                           DEPENDS vkontaktebackend ${QWEB_BACKEND} KF5::KIOCore
+add_library(Generic_VKontakte_Plugin
+            MODULE ${vkontakteplugin_SRCS})
+
+set_target_properties(Generic_VKontakte_Plugin PROPERTIES PREFIX "")
+
+target_link_libraries(Generic_VKontakte_Plugin
+                      Digikam::digikamcore
+
+                      Qt5::Core
+                      Qt5::Widgets
+                      Qt5::Gui
+                      Qt5::WebEngineWidgets
+
+                      KF5::ConfigCore
+                      KF5::KIOCore
+                      KF5::I18n
+
+                      vkontaktebackend
 )
+
+MACRO_ADD_PLUGIN_INSTALL_TARGET(Generic_VKontakte_Plugin generic)
