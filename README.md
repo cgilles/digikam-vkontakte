@@ -7,7 +7,7 @@ This is the legacy code to export contents to VKontakte Webservice.
 ## Common components
 
 - Cmake 3.x.                        <https://cmake.org/>
-- Qt6                               <https://www.qt.io/>
+- Qt5                               <https://www.qt.io/>
 
 ## From KDE framework
 
@@ -16,12 +16,11 @@ This is the legacy code to export contents to VKontakte Webservice.
 
 ## From digiKam
 
-- digiKam >= 7.2 plugin interface   <https://www.digikam.org>
+- digiKam >= 7.7 plugin interface   <https://www.digikam.org>
 
 # Compiling and Installing
 
-- mdkir build
+- bootstrap.sh
 - cd build
-- cmake . -DCMAKE_INSTALL_PREFIX=/usr
 - make
 - make install/fast
